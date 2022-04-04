@@ -1,32 +1,45 @@
-import { handleFileUpload, handleConfigUpdate, handleSelectLine, handleVarSave } from "./handlers.js";
+import { handleTabClick } from "./handlers.js";
 
-const state = {
-    showLines: 50,
-    delimeter: 'comma',
-    fileSelected: '',
-    files: {},
-};
+const tabs = document.querySelector('.tabs');
+const tabButtons = tabs.querySelectorAll('[role="tab"]');
+const tabPanels = tabs.querySelectorAll('[role="tabpanel"]');
 
-// file selection
-const uploadedFiles = document.getElementById('file-upload');
+tabButtons.forEach(button => button.addEventListener('click', handleTabClick));
 
-// configuration
-const configForm = document.getElementById('configure');
-const dataTable = document.getElementById('data-table');
-const fileList = document.getElementById('file-list');
-const showLines = document.getElementById('show-lines');
-const varList = document.getElementById('var-list');
-const varForm = document.getElementById('var-form');
+tabPanels
 
-uploadedFiles.addEventListener('change', handleFileUpload);
 
-configForm.addEventListener('submit', handleConfigUpdate);
+export { tabs, tabButtons, tabPanels }
 
-dataTable.addEventListener('click', handleSelectLine);
+// import { handleFileUpload, handleConfigUpdate, handleSelectLine, handleVarSave } from "./handlers.js";
 
-varForm.addEventListener('submit', handleVarSave);
+// const state = {
+//     showLines: 50,
+//     delimeter: 'comma',
+//     fileSelected: '',
+//     files: {},
+// };
 
-export { state, dataTable, fileList, showLines, varList, varForm };
+// // file selection
+// const uploadedFiles = document.getElementById('file-upload');
+
+// // configuration
+// const configForm = document.getElementById('configure');
+// const dataTable = document.getElementById('data-table');
+// const fileList = document.getElementById('file-list');
+// const showLines = document.getElementById('show-lines');
+// const varList = document.getElementById('var-list');
+// const varForm = document.getElementById('var-form');
+
+// uploadedFiles.addEventListener('change', handleFileUpload);
+
+// configForm.addEventListener('submit', handleConfigUpdate);
+
+// dataTable.addEventListener('click', handleSelectLine);
+
+// varForm.addEventListener('submit', handleVarSave);
+
+// export { state, dataTable, fileList, showLines, varList, varForm };
 
 
 

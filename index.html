@@ -9,97 +9,115 @@
     <script src="https://cdn.plot.ly/plotly-2.9.0.min.js"></script>
 </head>
 <body>
-    <main>
-        <section id="select-files">
-            <h2>Select File(s)</h2>
-            <input type="file" name="" id="file-upload" multiple>
-        </section>
-        <section id="configure">
-            <h2>Configure</h2>
-            <div class="file-preview">
-                <div class="options">
-                    <form id="config-form">
+    <div class="wrapper">
+        <div class="tabs">
+            <nav role="navigation">
+                <div role="tablist" aria-label="Navigation">
+                    <button role="tab" aria-selected="true" id="nav-files">Files</button>
+                    <button role="tab" aria-selected="false" id="nav-data">Data</button>
+                    <button role="tab" aria-selected="false" id="nav-plot">Plot</button>
+                </div>
+            </nav>
+            <main>
+                <div role="tabpanel" aria-labelledby="nav-files" id="files"></div>
+                <div role="tabpanel" aria-labelledby="nav-data" id="data" hidden></div>
+                <div role="tabpanel" aria-labelledby="nav-plot" id="plot" hidden></div>
+            </main>
+        </div>
+    </div>
+    <script src="scripts.js" type="module"></script>
+</body>
+</html>
+
+
+<!-- <main>
+    <section id="select-files">
+        <h2>Select File(s)</h2>
+        <input type="file" name="" id="file-upload" multiple>
+    </section>
+    <section id="configure">
+        <h2>Configure</h2>
+        <div class="file-preview">
+            <div class="options">
+                <form id="config-form">
+                    <div>
                         <div>
-                            <div>
-                                <label for="show-lines">Show Lines:</label>
-                                <input type="number" name="show-lines" id="show-lines" value="50">
-                            </div>
-                            <div>
-                                <label for="">Select Delimiter:</label>
-                                <select name="" id="">
+                            <label for="show-lines">Show Lines:</label>
+                            <input type="number" name="show-lines" id="show-lines" value="50">
+                        </div>
+                        <div>
+                            <label for="">Select Delimiter:</label>
+                            <select name="" id="">
+                                <option value="comma">Comma</option>
+                                <option value="tab">Tab</option>
+                                <option value="colon">Colon</option>
+                                <option value="pipe">Pipe</option>
+                                <option value="space">Space</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-wide">Update</button>
+                </form>
+            </div>
+            <div class="data-container">
+                <div>
+                    <div>
+                        <ul id="file-list"></ul>
+                    </div>
+                    <hr>
+                    <div>
+                        <form>
+                            <label for="var-select">Select Variable</label>
+                            <select name="var-select" id="var-select">
+                                <optgroup label="Defaults">
+                                    <option value="col-names">Column Names</option>
+                                    <option value="header">Header</option>
+                                    <option value="data">Data</option>
+                                    <option value="x">x</option>
+                                    <option value="y">y</option>
+                                </optgroup>
+                                <optgroup label="Custom"></optgroup>
+                            </select>
+                        </form>
+                        <div>
+                            <form id="var-form">
+                                <input type="text" name="varName" id="varName">
+                                <button class="btn" type="submit" value="submit">Save</button>
+                            </form>
+                            <ul id="var-list">
+                                <li class="diminish">No variables have been declared</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <h2>File Parsing Options</h2>
+                        <form>
+                            <label for="standard">Standard</label>
+                            <input type="radio" name="standard" id="standard">
+                            <label for="custom">Custom</label>
+                            <input type="radio" name="custom" id="custom">
+                            <label for="delimeter">Select Delimeter:</label>
+                            <select name="delimeter" id="delimeter">
                                     <option value="comma">Comma</option>
                                     <option value="tab">Tab</option>
                                     <option value="colon">Colon</option>
                                     <option value="pipe">Pipe</option>
                                     <option value="space">Space</option>
-                                </select>
-                            </div>
-                        </div>
-                        <button type="button" class="btn btn-wide">Update</button>
-                    </form>
-                </div>
-                <div class="data-container">
-                    <div>
-                        <div>
-                            <ul id="file-list"></ul>
-                        </div>
-                        <hr>
-                        <div>
-                            <form>
-                                <label for="var-select">Select Variable</label>
-                                <select name="var-select" id="var-select">
-                                    <optgroup label="Defaults">
-                                        <option value="col-names">Column Names</option>
-                                        <option value="header">Header</option>
-                                        <option value="data">Data</option>
-                                        <option value="x">x</option>
-                                        <option value="y">y</option>
-                                    </optgroup>
-                                    <optgroup label="Custom"></optgroup>
-                                </select>
-                            </form>
-                            <div>
-                                <form id="var-form">
-                                    <input type="text" name="varName" id="varName">
-                                    <button class="btn" type="submit" value="submit">Save</button>
-                                </form>
-                                <ul id="var-list">
-                                    <li class="diminish">No variables have been declared</li>
-                                </ul>
-                            </div>
-                        </div>
+                            </select>
+                            <button type="submit">Parse File</button>
+                        </form>
                     </div>
-                    <div>
-                        <div>
-                            <h2>File Parsing Options</h2>
-                            <form>
-                                <label for="standard">Standard</label>
-                                <input type="radio" name="standard" id="standard">
-                                <label for="custom">Custom</label>
-                                <input type="radio" name="custom" id="custom">
-                                <label for="delimeter">Select Delimeter:</label>
-                                <select name="delimeter" id="delimeter">
-                                        <option value="comma">Comma</option>
-                                        <option value="tab">Tab</option>
-                                        <option value="colon">Colon</option>
-                                        <option value="pipe">Pipe</option>
-                                        <option value="space">Space</option>
-                                </select>
-                                <button type="submit">Parse File</button>
-                            </form>
-                        </div>
-                        <table id="data-table" class="hidden">
-                            <tbody></tbody>
-                        </table>
-                    </div>
+                    <table id="data-table" class="hidden">
+                        <tbody></tbody>
+                    </table>
                 </div>
             </div>
-        </section>
-        <section id="plot">
-            <h2>Plot</h2>
-            <div id="plot-container"></div>
-        </section>
-    </main>
-    <script src="scripts.js" type="module"></script>
-</body>
-</html>
+        </div>
+    </section>
+    <section id="plot">
+        <h2>Plot</h2>
+        <div id="plot-container"></div>
+    </section>
+</main> -->

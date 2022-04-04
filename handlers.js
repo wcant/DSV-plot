@@ -1,3 +1,19 @@
+import { tabPanels, tabButtons } from "./scripts.js";
+
+export function handleTabClick(e) {
+    // hide all tab panels
+    tabPanels.forEach(panel => panel.hidden = true);
+    // mark all tabs as unselected
+    tabButtons.forEach(button => button.setAttribute('aria-selected', 'false'));
+    // mark the clicked tab as selected
+    e.currentTarget.setAttribute('aria-selected', 'true');
+    // find the associated tabPanel and show it
+    tabPanels.forEach(panel => {
+        if (panel.getAttribute('aria-labelledby') === e.currentTarget.id) panel.hidden = false;
+    });
+}
+
+/*
 import { readFile, appendToFileList, updateDataTable } from "./utils.js";
 import { state, fileList, showLines } from "./scripts.js";
 
@@ -78,3 +94,5 @@ export function handleConfigUpdate(e) {
     // get lines to show
     // get delimiter
 }
+
+*/
