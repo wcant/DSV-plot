@@ -1,0 +1,97 @@
+#data-sample {
+    width:100%;
+    min-height: 200px;
+    max-height: 1000px;
+}
+
+.options {
+    display: grid;
+    grid: auto-flow / 1fr 1fr 1fr;
+}
+
+.btn {
+    min-height: 44px;
+}
+
+.btn-wide {
+    display: block;
+    margin: 10px auto;
+    width: 50%;
+}
+
+.data-container {
+    display: flex;
+
+}
+
+.data-container div:nth-child(1) {
+    flex:1;
+    min-height:50px;
+    background-color: antiquewhite;
+    padding: 10px 10px;
+}
+
+.data-container div:nth-child(2) {
+    flex: 3;
+    background-color: white;
+    padding: 10px 10px;
+}
+
+#file-list {
+    list-style: none;
+}
+
+#file-list li {
+    margin: 5px 0px;
+}
+
+#file-list li.selected {
+    border: 1px solid black;
+}
+
+#data-table {
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+    empty-cells: show;
+}
+
+#data-table tr td:nth-child(1) {
+    width:50px;
+    background-color:lightblue;
+    border-bottom: 1px solid gray;
+}
+
+#data-table tr {
+    white-space: nowrap;
+    /* box-sizing: border-box; */
+}
+
+#data-table tr:nth-of-type(odd){
+    background-color:lightgray;
+}
+
+#data-table tr:nth-of-type(even){
+    background-color:white;
+}
+
+#data-table tr.selected {
+    border: 3px solid lightgreen;
+    border-radius: 50%;
+}
+
+#var-list {
+    list-style-type: none;
+}
+
+
+.hidden {
+    display:none;
+}
+
+/* Typography */
+
+.diminish {
+    font-size: .875em;
+    color: #6c757d;
+}
