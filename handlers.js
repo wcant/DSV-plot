@@ -1,5 +1,5 @@
-import { readFile, appendListItem, updateDataTable } from "./utils.js";
-import { data, uploadList } from "./index.js";
+import { readFile, appendToFileList, updateDataTable } from "./utils.js";
+import { state, fileList, showLines } from "./scripts.js";
 
 export function handleFileUpload(e) {
     const files = e.target.files;
@@ -7,8 +7,8 @@ export function handleFileUpload(e) {
         // handle promise and append data to filesData obj
     for (let file of files) {
         readFile(file).then(result => {
-            data[file.name] = { data: result };
-            appendListItem(file.name, uploadList);
+            state.files[file.name] = { data: result };
+            appendToFileList(file.name);
         }).catch(err => {
             console.log(`Failed to read file: ${file.name}`);
             console.log(err);
@@ -25,8 +25,6 @@ export function handleFileListClick(e) {
     const fileSelected = e.target.innerText;
     const previewLength = showLines.value;
     updateDataTable(fileSelected, previewLength);
-
-    // show file parse options
 
     // update state
     state.fileSelected = fileSelected;
@@ -80,20 +78,3 @@ export function handleConfigUpdate(e) {
     // get lines to show
     // get delimiter
 }
-
-
-// export function handleFileUpload(e) {
-//     const files = e.target.files;
-//     // loop over reading each file
-//         // handle promise and append data to filesData obj
-//     for (let file of files) {
-//         readFile(file).then(result => {
-//             state.files[file.name] = { data: result };
-
-//             appendToFileList(file.name);
-//         }).catch(err => {
-//             console.log(`Failed to read file: ${file.name}`);
-//             console.log(err);
-//         });
-//     }
-// }

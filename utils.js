@@ -1,6 +1,5 @@
-import { data } from './index.js';
+import { state, dataTable, fileList, showLines } from './scripts.js';
 import { handleFileListClick } from './handlers.js';
-import { uploadList } from './index.js';
 
 export function readFile(file) {
     return new Promise((resolve, reject) => {
@@ -21,11 +20,11 @@ export function readFile(file) {
     });
 }
 
-export function appendListItem (str, ul) {
+export function appendToFileList(name) {
     const li = document.createElement('li');
-    li.innerText = str;
-    console.log(str, ul);
-    ul.appendChild(li);
+    li.innerText = name;
+    li.addEventListener('click', handleFileListClick);
+    fileList.append(li);
 }
 
 export function updateDataTable(fileName, length) {
