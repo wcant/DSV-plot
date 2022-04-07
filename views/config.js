@@ -1,32 +1,52 @@
-import {data} from './index.js'
-const config = document.querySelector('.config');
+import { root, data, uploadList } from "../index.js";
 
-function FileList(files) {
+function update() {
+    root.innerHTML = ConfigPage();
+}
+
+export function ConfigPage() {
+
+    return `<div class="wrapper">
+                <div class="fileList">${FilesList()}</div>
+                <div class="variableMenu">${VariableMenu()}</div>
+            </div>
+            <div class="wrapper">
+                <div class="configMenu">${ConfigMenu()}</div>
+                <div class="data">${DataTable()}</div>
+            </div>`;
+}
+
+function FilesList() {
     const state = {
         fileSelected: ''
-    }
+    };
 
-    const listItems = '';
+    let listItems = '';
 
-    if (state.files.length > 1) {
-        for (let key in object.keys(state.files)) {
+    if (data !== undefined && data.length !== 0) {
+        for (let key of Object.keys(data)) {
+            console.log(key);
             listItems += `<li>${key}</li>`;
         }
+    } else {
+        listItems = `<li>No files found.</li>`;
     }
+
+    // when a new file is clicked, ConfigMenu, VariableMenu, and DataTable need to be updated
 
     return `<ul>
                 ${listItems}
             </ul>`;
 }
 
-function ConfigMenu() {
+function ConfigMenu(fileSelected) {
 
     const state = {
         showLines: 50,
         delimiter: 'comma',
         cellsSelected: [],
 
-    }
+    };
 
     return `<form id="config-form">
                 <div>
@@ -49,7 +69,28 @@ function ConfigMenu() {
             </form>`;
 }
 
-function VariableMenu() {
+function VariableMenu(fileSelected) {
+
+    const state = {};
+
+
+    // function updateVarList() {
+    //     const varList = document.getElementById('var-list');
+
+    //     console.log(varList);
+    //     const result = ``;
+    //     if ("vars" in data[fileSelected]) {
+    //         return `<li class="diminish">No variables have been declared</li>`;
+    //     } else {
+    //         for (let key in Object.keys(data[fileSelected].vars)) {
+    //             result += `<li>${key}</li>`;
+    //         }
+    //     }
+
+    //     return result;
+    // }
+
+    // ultimately, the data passed to the Plot view will come from the variables saved
 
     return `<form>
                 <label for="var-select">Select Variable</label>
@@ -70,14 +111,22 @@ function VariableMenu() {
                     <button class="btn" type="submit" value="submit">Save</button>
                 </form>
                 <ul id="var-list">
-                    <li class="diminish">No variables have been declared</li>
+
                 </ul>
             </div>`;
 }
 
-function DataTable() {
+function DataTable(fileSelected) {
+
+    const state = {};
 
     let result = ``;
+
+    // data selected here (from click events on columns (usually)) needs to be stored
+    // as variables and shown within the VariableMenu.  The data needs to be either referencable
+    // from something saved, such as line/col numbers, or move the data into an object/array
+
+
     // if file hasn't been parsed, show inital parse menu
     result = `  <h2>File Parsing Options</h2>
                 <form>
@@ -99,16 +148,3 @@ function DataTable() {
     return ``;
 }
 
-function ConfigPage() {
-
-    return `<div class="wrapper">
-                <div class="fileList">${FileList(data)}</div>
-                <div class="variableMenu">${VariableMenu()}</div>
-            </div>
-            <div class="wrapper">
-                <div class="configMenu">${ConfigMenu()}</div>
-                <div class="data">${DataTable()}</div>
-            </div>`;
-}
-
-config.innerHTML = ConfigPage();

@@ -1,5 +1,6 @@
 import { readFile, appendListItem, updateDataTable } from "./utils.js";
-import { data, uploadList } from "./index.js";
+import { root, data, uploadList } from "./index.js";
+import { ConfigPage } from "./views/config.js";
 
 export function handleFileUpload(e) {
     const files = e.target.files;
@@ -7,6 +8,7 @@ export function handleFileUpload(e) {
         // handle promise and append data to filesData obj
     for (let file of files) {
         readFile(file).then(result => {
+            console.log(typeof file.name);
             data[file.name] = { data: result };
             appendListItem(file.name, uploadList);
         }).catch(err => {
@@ -14,6 +16,19 @@ export function handleFileUpload(e) {
             console.log(err);
         });
     }
+}
+
+export function handleMainClick(e) {
+    console.log(e.target);
+    if(e.target.name === 'gotoConfig') {
+        root.innerHTML = ConfigPage();
+    }
+
+    // if(e.target.name === 'gotoPlot') {
+    //     root.innerHTML = PlotPage();
+    // }
+
+
 }
 
 export function handleFileListClick(e) {

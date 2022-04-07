@@ -9,22 +9,95 @@
     <script src="https://cdn.plot.ly/plotly-2.9.0.min.js"></script>
 </head>
 <body>
-    <header>
-
-    </header>
-    <main>
-        <form action="/config.html" class="fileForm">
-            <h2>Select File(s)</h2>
-            <input type="file" name="" id="select-files" multiple>
-            <p>
-                <input type="submit" value="Submit">
-            </p>
-        </form>
+    <header></header>
+    <main><h2>Select File(s)</h2>
+        <input type="file" name="" id="file-upload" multiple>
         <ul class="uploadList"></ul>
+        <button name="gotoConfig">Continue</button>
     </main>
-    <footer>
-
-    </footer>
+    <footer></footer>
     <script src="index.js" type="module"></script>
 </body>
 </html>
+
+
+
+<!-- <h2>Configure</h2>
+<div class="file-preview">
+    <div class="options">
+        <form id="config-form">
+            <div>
+                <div>
+                    <label for="show-lines">Show Lines:</label>
+                    <input type="number" name="show-lines" id="show-lines" value="50">
+                </div>
+                <div>
+                    <label for="">Select Delimiter:</label>
+                    <select name="" id="">
+                        <option value="comma">Comma</option>
+                        <option value="tab">Tab</option>
+                        <option value="colon">Colon</option>
+                        <option value="pipe">Pipe</option>
+                        <option value="space">Space</option>
+                    </select>
+                </div>
+            </div>
+            <button type="button" class="btn btn-wide">Update</button>
+        </form>
+    </div>
+    <div class="data-container">
+        <div>
+            <div>
+                <ul id="file-list"></ul>
+            </div>
+            <hr>
+            <div>
+                <form>
+                    <label for="var-select">Select Variable</label>
+                    <select name="var-select" id="var-select">
+                        <optgroup label="Defaults">
+                            <option value="col-names">Column Names</option>
+                            <option value="header">Header</option>
+                            <option value="data">Data</option>
+                            <option value="x">x</option>
+                            <option value="y">y</option>
+                        </optgroup>
+                        <optgroup label="Custom"></optgroup>
+                    </select>
+                </form>
+                <div>
+                    <form id="var-form">
+                        <input type="text" name="varName" id="varName">
+                        <button class="btn" type="submit" value="submit">Save</button>
+                    </form>
+                    <ul id="var-list">
+                        <li class="diminish">No variables have been declared</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div>
+                <h2>File Parsing Options</h2>
+                <form>
+                    <label for="standard">Standard</label>
+                    <input type="radio" name="standard" id="standard">
+                    <label for="custom">Custom</label>
+                    <input type="radio" name="custom" id="custom">
+                    <label for="delimeter">Select Delimeter:</label>
+                    <select name="delimeter" id="delimeter">
+                            <option value="comma">Comma</option>
+                            <option value="tab">Tab</option>
+                            <option value="colon">Colon</option>
+                            <option value="pipe">Pipe</option>
+                            <option value="space">Space</option>
+                    </select>
+                    <button type="submit">Parse File</button>
+                </form>
+            </div>
+            <table id="data-table" class="hidden">
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div> -->
