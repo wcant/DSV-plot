@@ -11,7 +11,6 @@ root.addEventListener('click', handleMainClick);
 
 selectedFiles.addEventListener('change', handleFileUpload);
 
-
 // be able to remove files from the uploadList (and data object) to not be used later
 
 export { root, data, uploadList };

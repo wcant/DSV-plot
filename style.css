@@ -1,3 +1,8 @@
+ul {
+    list-style-type: none;
+}
+
+
 #data-sample {
     width:100%;
     min-height: 200px;
@@ -37,10 +42,6 @@
     padding: 10px 10px;
 }
 
-#file-list {
-    list-style: none;
-}
-
 #file-list li {
     margin: 5px 0px;
 }
@@ -78,10 +79,6 @@
 #data-table tr.selected {
     border: 3px solid lightgreen;
     border-radius: 50%;
-}
-
-#var-list {
-    list-style-type: none;
 }
 
 

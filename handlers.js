@@ -1,6 +1,6 @@
 import { readFile, appendListItem, updateDataTable } from "./utils.js";
 import { root, data, uploadList } from "./index.js";
-import { ConfigPage } from "./views/config.js";
+import { ConfigPage, ParseMenu } from "./views/config.js";
 
 export function handleFileUpload(e) {
     const files = e.target.files;
@@ -10,6 +10,15 @@ export function handleFileUpload(e) {
         readFile(file).then(result => {
             console.log(typeof file.name);
             data[file.name] = { data: result };
+
+            // set initial file properties
+            data[file.name].parsedData = [];
+            data[file.name].showLines = 50;
+            data[file.name].delimiter = null;
+            data[file.name].lineSelected = null;
+            data[file.name].varSelected = null;
+            data[file.name].vars = {};
+
             appendListItem(file.name, uploadList);
         }).catch(err => {
             console.log(`Failed to read file: ${file.name}`);
@@ -20,8 +29,8 @@ export function handleFileUpload(e) {
 
 export function handleMainClick(e) {
     console.log(e.target);
-    if(e.target.name === 'gotoConfig') {
-        root.innerHTML = ConfigPage();
+    if(e.target.name === 'gotoParse') {
+        root.innerHTML = ParseMenu().render();
     }
 
     // if(e.target.name === 'gotoPlot') {
