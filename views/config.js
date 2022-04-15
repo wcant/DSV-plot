@@ -1,26 +1,28 @@
 import { root, data, uploadList } from "../index.js";
 
-function update() {
-    root.innerHTML = ConfigPage();
-}
+// Initialize Components
+const filesList = FilesList();
+const parseMenu = ParseMenu();
+const variableMenu = VariableMenu();
+const dataTable = DataTable();
+const configPage = ConfigPage();
 
-// &#9989;	green checkmark
+function update() {
+    root.innerHTML = configPage.render();
+}
 
 export function ConfigPage() {
 
-    const state = {}
+    const state = {};
 
     // If the user clicks a file on the list and it hasn't been parsed, then prompt to display the parse menu
 
-    const FilesListRender = FilesList().render();
-    const VariableMenuRender = VariableMenu().render();
-    const DataTableRender = DataTable().render();
     const render = () => `<div class="wrapper">
-                                <div class="fileList">${FilesListRender}</div>
-                                <div class="variableMenu">${VariableMenuRender}</div>
+                                <div class="fileList">${filesList.render()}</div>
+                                <div class="variableMenu">${variableMenu.render()}</div>
                             </div>
                             <div class="wrapper">
-                                <div class="data">${DataTableRender}</div>
+                                <div class="data">${dataTable.render()}</div>
                             </div>`;
 
     return {
@@ -29,88 +31,117 @@ export function ConfigPage() {
     };
 }
 
-function FilesList() {
+export function FilesList() {
     const state = {
         fileSelected: ''
     };
 
     let listItems = '';
 
-    if (data !== undefined && data.length !== 0) {
-        for (let key of Object.keys(data)) {
-            console.log(key);
-            listItems += `<li>${key}</li>`;
+    function updateFileSelected(li) {
+        const ul = li.closest('ul');
+        const allItems = ul.querySelectorAll('li');
+
+        // remove selected class from all li
+        for (let item of allItems) {
+            item.classList.remove('selected');
         }
-    } else {
-        listItems = `<li>No files found.</li>`;
+
+        // add selected class to the clicked li
+        li.classList.add('selected');
+
+        // update state
+        filesList.state.fileSelected = li.innerText;
+        console.log(filesList.state);
+    }
+
+    function updateList() {
+        if (data !== undefined && data.length !== 0) {
+            for (let key of Object.keys(data)) {
+                listItems += `<li>${key}</li>`;
+            }
+        } else {
+            listItems = `<li>No files found.</li>`;
+        }
+        return listItems;
     }
 
     // when a new file is clicked, ConfigMenu, VariableMenu, and DataTable need to be updated
+    // and the clicked file highlighted in file list
 
-    const render = () => `<ul>
-                            ${listItems}
+    const render = () => `<ul class="fileList">
+                            ${updateList()}
                           </ul>`;
 
     return {
         state,
-        render
+        render,
+        updateFileSelected
     }
 }
 
 export function ParseMenu() {
 
-    const state = {};
+    const state = {
+        options: {}
+    };
+
+    const delimiterMenu = `<div>
+                                <label for="">Select Delimiter:</label>
+                                <select name="" id="">
+                                    <option value="comma">Comma</option>
+                                    <option value="tab">Tab</option>
+                                    <option value="colon">Colon</option>
+                                    <option value="pipe">Pipe</option>
+                                    <option value="space">Space</option>
+                                </select>
+                            </div>`;
+
+    function updatePreview() {
+        const preview = document.querySelector('.parsePreview');
+        const previewLines = parseInt(document.getElementById('previewLines').value);
+        preview.innerHTML = dataTable.render(filesList.state.fileSelected, previewLines);
+    }
 
     const render = () => `
         <div class="parseMenu">
             <h2>Parse Files</h2>
             <div>
-                ${FilesList().render()}
+                ${filesList.render()}
             </div>
             <div class="parseOptions">
-                <div>
-                    <p>
-                        <label for="simpleParse">Simple</label>
-                        <input type="radio" name="simpleParse" id="simpleParse">
-                        Select this option if your file has consistent delimiters and a single line corresponding to the
-                        header, or column descriptions, of the data.  For space separated data, or files with headers on more
-                        than one line, you should select custom instead
-                    </p>
-                    <p>
-                        <label for="customParse">Custom</label>
-                        <input type="radio" name="customParse" id="customParse">
-                        Select this option if your file has header information on more than one line and/or you are concerned
-                        about the consistency of your file being clearly delimited.  You will be able to select which lines
-                        of the file are header information and which are data.
-                    </p>
-                </div>
                 <form id="parseForm">
                     <div>
+                        <p>
+                            <label for="simpleParse">Simple</label>
+                            <input type="radio" name="parseType" id="simpleParse">
+                            Select this option if your file has consistent delimiters and a single line corresponding to the
+                            header, or column descriptions, of the data.  For space separated data, or files with headers on more
+                            than one line, you should select custom instead
+                        </p>
+                        <p>
+                            <label for="customParse">Custom</label>
+                            <input type="radio" name="parseType" id="customParse">
+                            Select this option if your file has header information on more than one line and/or you are concerned
+                            about the consistency of your file being clearly delimited.  You will be able to select which lines
+                            of the file are header information and which are data.
+                        </p>
+                    </div>
+                    <div>
                         <div>
-                            <label for="show-lines">Show Lines:</label>
-                            <input type="number" name="show-lines" id="show-lines" value="50">
-                        </div>
-                        <div>
-                            <label for="">Select Delimiter:</label>
-                            <select name="" id="">
-                                <option value="comma">Comma</option>
-                                <option value="tab">Tab</option>
-                                <option value="colon">Colon</option>
-                                <option value="pipe">Pipe</option>
-                                <option value="space">Space</option>
-                            </select>
+                            <label for="previewLines">Preview Lines:</label>
+                            <input type="number" name="previewLines" id="previewLines" value="50">
                         </div>
                     </div>
-                    <button type="button" class="btn btn-wide">Update</button>
+                    <button type="button" class="btn btn-wide">Go</button>
                 </form>
             </div>
-            <div class="parsePreview">
-                ${DataTable().render()}
-            </div>
+            <div class="parsePreview"></div>
         </div>`;
     return {
         state,
-        render
+        render,
+        updatePreview
     }
 }
 
@@ -146,25 +177,29 @@ function ConfigMenu(fileSelected) {
 
 function VariableMenu(fileSelected) {
 
-    const state = {};
+    const state = {
+        vars: [],
+    };
 
-    // function updateVarList() {
-    //     const varList = document.getElementById('var-list');
+    function updateVarList() {
+        const varList = document.getElementById('var-list');
 
-    //     console.log(varList);
-    //     const result = ``;
-    //     if ("vars" in data[fileSelected]) {
-    //         return `<li class="diminish">No variables have been declared</li>`;
-    //     } else {
-    //         for (let key in Object.keys(data[fileSelected].vars)) {
-    //             result += `<li>${key}</li>`;
-    //         }
-    //     }
+        console.log(varList);
+        const result = ``;
+        if ("vars" in data[fileSelected]) {
+            return `<li class="diminish">No variables have been declared</li>`;
+        } else {
+            for (let key in Object.keys(data[fileSelected].vars)) {
+                result += `<li>${key}</li>`;
+            }
+        }
 
-    //     return result;
-    // }
+        return result;
+    }
 
     // ultimately, the data passed to the Plot view will come from the variables saved
+
+
 
     const render = () => `<form>
                             <label for="var-select">Select Variable</label>
@@ -195,7 +230,7 @@ function VariableMenu(fileSelected) {
     };
 }
 
-function DataTable(fileSelected) {
+function DataTable() {
 
     const state = {
         cellsSelected: [],
@@ -218,8 +253,17 @@ function DataTable(fileSelected) {
     //     </tbody>
     // </table>
 
-    const render = () => {
-        return ``;
+    const render = (fileSelected, previewLines) => {
+        console.log(fileSelected);
+        const rawData = data[fileSelected].data;
+
+        let result = `<ul>`;
+        for (let i = 0; i < previewLines; i++) {
+            result += `<li>${rawData[i]}</li>`;
+        }
+        result += `</ul>`;
+
+        return result;
     };
 
     return {
@@ -228,3 +272,5 @@ function DataTable(fileSelected) {
     };
 }
 
+
+export {filesList, parseMenu, variableMenu, dataTable, configPage};

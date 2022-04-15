@@ -1,5 +1,4 @@
 import { data } from './index.js';
-import { handleFileListClick } from './handlers.js';
 import { uploadList } from './index.js';
 
 export function readFile(file) {

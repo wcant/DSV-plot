@@ -1,6 +1,6 @@
 import { readFile, appendListItem, updateDataTable } from "./utils.js";
 import { root, data, uploadList } from "./index.js";
-import { ConfigPage, ParseMenu } from "./views/config.js";
+import { filesList, parseMenu, variableMenu, dataTable } from "./views/config.js";
 
 export function handleFileUpload(e) {
     const files = e.target.files;
@@ -28,33 +28,49 @@ export function handleFileUpload(e) {
 }
 
 export function handleMainClick(e) {
-    console.log(e.target);
+
+    // console.log(e.target);
     if(e.target.name === 'gotoParse') {
-        root.innerHTML = ParseMenu().render();
+        root.innerHTML = parseMenu.render();
     }
 
     // if(e.target.name === 'gotoPlot') {
-    //     root.innerHTML = PlotPage();
-    // }
+        //     root.innerHTML = PlotPage();
+        // }
 
+    if(!!e.target.closest('.fileList')) {
+        filesList.updateFileSelected(e.target);
+    }
 
+    // handle ParseMenu Clicks
+    if(!!e.target.closest('.parseMenu')) {
+        console.log('parse menu clicked');
+        // handle submit
+        if (e.target.type === 'button'){
+            e.preventDefault();
+            console.log('go');
+            parseMenu.updatePreview();
+
+        }
+
+    }
 }
 
-export function handleFileListClick(e) {
-    const otherLi = fileList.querySelectorAll('li');
-    otherLi.forEach(li => li.classList.remove('selected'));
-    e.target.classList.add('selected');
+// export function handleFileListClick(e) {
+//     const otherLi = fileList.querySelectorAll('li');
+//     otherLi.forEach(li => li.classList.remove('selected'));
+//     e.target.classList.add('selected');
 
-    // update data table when new li is selected
-    const fileSelected = e.target.innerText;
-    const previewLength = showLines.value;
-    updateDataTable(fileSelected, previewLength);
+//     // update data table when new li is selected
+//     const fileSelected = e.target.innerText;
+//     const previewLength = showLines.value;
+//     updateDataTable(fileSelected, previewLength);
 
-    // show file parse options
+//     // show file parse options
 
-    // update state
-    state.fileSelected = fileSelected;
-}
+//     // update state
+//     state.fileSelected = fileSelected;
+// }
 
 export function handleSelectLine(e) {
     // only run when inner table elements are clicked
