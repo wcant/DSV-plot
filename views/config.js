@@ -7,23 +7,30 @@ const variableMenu = VariableMenu();
 const dataTable = DataTable();
 const configPage = ConfigPage();
 
-function update() {
-    root.innerHTML = configPage.render();
-}
 
 export function ConfigPage() {
 
     const state = {};
 
+
     // If the user clicks a file on the list and it hasn't been parsed, then prompt to display the parse menu
 
-    const render = () => `<div class="wrapper">
-                                <div class="fileList">${filesList.render()}</div>
-                                <div class="variableMenu">${variableMenu.render()}</div>
-                            </div>
-                            <div class="wrapper">
-                                <div class="data">${dataTable.render()}</div>
-                            </div>`;
+    function update() {
+        root.innerHTML = configPage.render();
+    }
+
+    function render() {
+        if(!!data.parsed.length) {
+            return `<div class="wrapper">
+                        <div class="fileList">${filesList.render()}</div>
+                        <div class="variableMenu">${variableMenu.render()}</div>
+                    </div>
+                    <div class="wrapper">
+                        <div class="data">${dataTable.render()}</div>
+                    </div>`;
+        }
+        return parseMenu.render();
+    }
 
     return {
         state,
@@ -56,8 +63,8 @@ export function FilesList() {
     }
 
     function updateList() {
-        if (data !== undefined && data.length !== 0) {
-            for (let key of Object.keys(data)) {
+        if (data !== undefined && data.uploads.length !== 0) {
+            for (let key of Object.keys(data.uploads)) {
                 listItems += `<li>${key}</li>`;
             }
         } else {
@@ -83,24 +90,75 @@ export function FilesList() {
 export function ParseMenu() {
 
     const state = {
-        options: {}
+        previewLines: 50,
+        parseType: 'simple',
+        delimiter: 'comma',
+        previewData: {}
     };
 
-    const delimiterMenu = `<div>
-                                <label for="">Select Delimiter:</label>
-                                <select name="" id="">
-                                    <option value="comma">Comma</option>
-                                    <option value="tab">Tab</option>
-                                    <option value="colon">Colon</option>
-                                    <option value="pipe">Pipe</option>
-                                    <option value="space">Space</option>
-                                </select>
-                            </div>`;
+    const previewInput = document.getElementById('previewLines');
+    const simpleInput = document.getElementById('simpleParse');
+    const delimiterInput = document.getElementById('delimiter');
 
-    function updatePreview() {
+    // render needs to be a function of these state variables
+    function updateState() {
+        this.state.previewLines = previewInput.value;
+        this.state.parseType = simpleInput.checked ? 'simple' : 'custom';
+        this.state.delimiter = delimiterInput.value;
+    }
+
+    function updatePreview(table) {
         const preview = document.querySelector('.parsePreview');
-        const previewLines = parseInt(document.getElementById('previewLines').value);
-        preview.innerHTML = dataTable.render(filesList.state.fileSelected, previewLines);
+        preview.innerHTML = table;
+    }
+
+
+    function formSubmit() {
+
+
+        // check if form inputs are valid
+        this.state.previewLines > 0
+
+
+
+        // make Continue button clickable on successful submit
+        const parseDoneBtn = document.getElementById('parseDone');
+        parseDoneBtn.disabled = false;
+
+        debugger;
+            // It would make sense if all invalid inputs are shown at once
+            // instead of as each one is caught sequentially
+
+            // // check if file is selected
+            // // need to refactor this (nested try/catch maybe not necessary)
+            // try {
+            //     // select elements of form to be checked
+            //     const previewInput = document.getElementById('previewLines');
+            //     const simpleInput = document.getElementById('simpleParse');
+            //     const customInput = document.getElementById('customParse');
+
+            //     try {
+            //         // check if preview lines has value (also non-zero)
+
+            //     } catch (error) {
+
+            //         alert('Enter a value (> 0) for Preview Lines.');
+            //     }
+
+            //     try {
+            //         // check if radio buttons selected
+            //         if (simpleInput.checked) {
+            //             // add table to DOM
+            //             parseMenu.updatePreview();
+            //         }
+            //     } catch (error) {
+
+            //     }
+            // } catch (error) {
+            //     console.log(error);
+            //     alert('Select a file to parse.');
+            // }
+
     }
 
     const render = () => `
@@ -114,26 +172,36 @@ export function ParseMenu() {
                     <div>
                         <p>
                             <label for="simpleParse">Simple</label>
-                            <input type="radio" name="parseType" id="simpleParse">
-                            Select this option if your file has consistent delimiters and a single line corresponding to the
+                            <input type="radio" name="parseType" id="simpleParse" checked required>
+                            - Select this option if your file has consistent delimiters and a single line corresponding to the
                             header, or column descriptions, of the data.  For space separated data, or files with headers on more
                             than one line, you should select custom instead
                         </p>
                         <p>
                             <label for="customParse">Custom</label>
-                            <input type="radio" name="parseType" id="customParse">
-                            Select this option if your file has header information on more than one line and/or you are concerned
+                            <input type="radio" name="parseType" id="customParse" required>
+                            - Select this option if your file has header information on more than one line and/or you are concerned
                             about the consistency of your file being clearly delimited.  You will be able to select which lines
                             of the file are header information and which are data.
                         </p>
                     </div>
                     <div>
-                        <div>
-                            <label for="previewLines">Preview Lines:</label>
-                            <input type="number" name="previewLines" id="previewLines" value="50">
-                        </div>
+                        <label for="delimiter">Select Delimiter:</label>
+                        <select name="delimiter" id="delimiter" required>
+                            <option value="comma">Comma</option>
+                            <option value="tab">Tab</option>
+                            <option value="colon">Colon</option>
+                            <option value="pipe">Pipe</option>
+                            <option value="space">Space</option>
+                        </select>
                     </div>
-                    <button type="button" class="btn btn-wide">Go</button>
+                    <div>
+                        <label for="previewLines">Preview Lines (default: 50; Min: 1; Max: 1000):</label>
+                        <input type="number" name="previewLines" id="previewLines" value="50" min="1" max="1000">
+                    </div>
+                    <button type="submit" class="btn btn-wide" value="parseFile" disabled>Parse File</button>
+                    <button type="submit" class="btn btn-wide" value="parseAll" disabled>Parse All</button>
+                    <button type="submit" class="btn btn-wide" id="parseDone" disabled>Continue</button>
                 </form>
             </div>
             <div class="parsePreview"></div>
@@ -141,7 +209,8 @@ export function ParseMenu() {
     return {
         state,
         render,
-        updatePreview
+        updatePreview,
+        formSubmit
     }
 }
 
@@ -253,9 +322,17 @@ function DataTable() {
     //     </tbody>
     // </table>
 
+    const renderSimple = (fileSelected, previewLines) => {
+
+    };
+
+    const renderCustom = (fileSelected, previewLines) => {
+
+    };
+
     const render = (fileSelected, previewLines) => {
         console.log(fileSelected);
-        const rawData = data[fileSelected].data;
+        const rawData = data.uploads[fileSelected];
 
         let result = `<ul>`;
         for (let i = 0; i < previewLines; i++) {

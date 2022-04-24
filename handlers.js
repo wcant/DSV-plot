@@ -1,6 +1,6 @@
-import { readFile, appendListItem, updateDataTable } from "./utils.js";
+import { readFile, appendListItem } from "./utils.js";
 import { root, data, uploadList } from "./index.js";
-import { filesList, parseMenu, variableMenu, dataTable } from "./views/config.js";
+import { filesList, parseMenu, variableMenu, dataTable, configPage } from "./views/config.js";
 
 export function handleFileUpload(e) {
     const files = e.target.files;
@@ -9,15 +9,7 @@ export function handleFileUpload(e) {
     for (let file of files) {
         readFile(file).then(result => {
             console.log(typeof file.name);
-            data[file.name] = { data: result };
-
-            // set initial file properties
-            data[file.name].parsedData = [];
-            data[file.name].showLines = 50;
-            data[file.name].delimiter = null;
-            data[file.name].lineSelected = null;
-            data[file.name].varSelected = null;
-            data[file.name].vars = {};
+            data.uploads[file.name] = { data: result };
 
             appendListItem(file.name, uploadList);
         }).catch(err => {
@@ -29,9 +21,8 @@ export function handleFileUpload(e) {
 
 export function handleMainClick(e) {
 
-    // console.log(e.target);
-    if(e.target.name === 'gotoParse') {
-        root.innerHTML = parseMenu.render();
+    if(e.target.value === 'gotoConfig') {
+        root.innerHTML = configPage.render();
     }
 
     // if(e.target.name === 'gotoPlot') {
@@ -42,19 +33,64 @@ export function handleMainClick(e) {
         filesList.updateFileSelected(e.target);
     }
 
-    // handle ParseMenu Clicks
     if(!!e.target.closest('.parseMenu')) {
-        console.log('parse menu clicked');
-        // handle submit
+
         if (e.target.type === 'button'){
             e.preventDefault();
-            console.log('go');
-            parseMenu.updatePreview();
+
+            parseMenu.updateState();
+            if (e.target.value === 'parseFile') {
+                parseMenu.formSubmit();
+            }
+            if (e.target.value === 'parseAll') {
+                parseMenu.formSubmit();
+            }
+            if (e.target.id === 'parseDone') {
+                configPage.update();
+            }
+
+            console.log('submitted');
 
         }
 
     }
 }
+
+
+            // It would be easier on the user if all invalid inputs are shown at once
+            // instead of as each one is caught sequentially
+
+            // // check if file is selected
+            // // need to refactor this (nested try/catch maybe not necessary)
+            // try {
+            //     // select elements of form to be checked
+            //     const previewInput = document.getElementById('previewLines');
+            //     const simpleInput = document.getElementById('simpleParse');
+            //     const customInput = document.getElementById('customParse');
+
+            //     try {
+            //         // check if preview lines has value (also non-zero)
+
+            //     } catch (error) {
+
+            //         alert('Enter a value (> 0) for Preview Lines.');
+            //     }
+
+            //     try {
+            //         // check if radio buttons selected
+            //         if (simpleInput.checked) {
+            //             // add table to DOM
+            //             parseMenu.updatePreview();
+            //         }
+            //     } catch (error) {
+
+            //     }
+            // } catch (error) {
+            //     console.log(error);
+            //     alert('Select a file to parse.');
+            // }
+
+
 
 // export function handleFileListClick(e) {
 //     const otherLi = fileList.querySelectorAll('li');

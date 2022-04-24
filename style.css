@@ -50,17 +50,50 @@ ul {
 }
 
 .parseMenu {
-    max-width: 60%;
+    max-width: 80%;
     padding: 25px 25px;
-    position: relative;
     background-color: white;
+}
+.fileList {
     border: 1px solid rgba(0,0,0,.125);
-    box-sizing: border-box;
     border-radius: 0.25rem;
+    min-height: 100px;
+}
+
+.fileList li {
+    margin: 10px 0;
+}
+
+.parseOptions {
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: 0.25rem;
+}
+
+.parsePreview {
+    width: 800px;
+    overflow-y: hidden;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.parsePreview ul {
+
+}
+
+.parsePreview ul li {
+    white-space: nowrap;
 }
 
 li.selected {
     border: 1px solid black;
+}
+
+input:valid {
+    border: 2px solid black;
+}
+
+input:invalid {
+    border: 2px solid red;
 }
 
 #data-sample {

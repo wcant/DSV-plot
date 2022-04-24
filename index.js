@@ -5,7 +5,12 @@ const root = document.querySelector('main');
 const selectedFiles = document.getElementById('file-upload');
 const uploadList = document.querySelector('.uploadList');
 
-const data = {};
+const data = {
+    uploads: {},
+    parsed: {},
+    vars: {},
+    plots: {}
+};
 
 root.addEventListener('click', handleMainClick);
 
@@ -14,9 +19,6 @@ selectedFiles.addEventListener('change', handleFileUpload);
 // be able to remove files from the uploadList (and data object) to not be used later
 
 export { root, data, uploadList };
-
-
-
 
 
 // import { handleFileUpload, handleConfigUpdate, handleSelectLine, handleVarSave } from "./handlers.js";
